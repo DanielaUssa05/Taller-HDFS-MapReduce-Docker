@@ -1,0 +1,11 @@
+fecha,producto,categoria,cantidad,precio_unitario
+2026-11-01,aceite,lubricantes,2,45000
+2026-11-02,filtro_aire,filtros,1,26000
+2026-11-03,bujia,encendido,3,25000
+2026-11-04,aceite,lubricantes,1,42000
+2026-11-05,pastillas,frenos,2,22000
+2026-11-06,filtro_aceite,filtros,2,8000
+2026-11-07,bujia,encendido,1,28000
+2026-11-08,bandas,frenos,1,31000
+2026-11-09,kit_arrastre,transmision,1,128000
+2026-11-09,aceite,lubricantes,1,50000

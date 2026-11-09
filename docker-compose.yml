@@ -1,0 +1,80 @@
+services:
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: taller-namenode
+    hostname: namenode
+    restart: unless-stopped
+    ports:
+      - "9870:9870"
+      - "9000:9000"
+    volumes:
+      - namenode_data:/hadoop/dfs/name
+      - ./data:/data:ro
+      - ./jobs:/jobs:ro
+    environment:
+      CLUSTER_NAME: Taller-HDFS
+    env_file: ./hadoop.env
+
+  datanode1:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: taller-datanode1
+    hostname: datanode1
+    restart: unless-stopped
+    volumes:
+      - datanode1_data:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+    env_file: ./hadoop.env
+
+  datanode2:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: taller-datanode2
+    hostname: datanode2
+    restart: unless-stopped
+    volumes:
+      - datanode2_data:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+    env_file: ./hadoop.env
+
+  resourcemanager:
+    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
+    container_name: taller-resourcemanager
+    hostname: resourcemanager
+    restart: unless-stopped
+    ports:
+      - "8088:8088"
+    environment:
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 datanode2:9864"
+    env_file: ./hadoop.env
+
+  nodemanager:
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+    container_name: taller-nodemanager
+    hostname: nodemanager
+    restart: unless-stopped
+    ports:
+      - "8042:8042"
+    environment:
+      SERVICE_PRECONDITION: "resourcemanager:8088"
+    env_file: ./hadoop.env
+
+  historyserver:
+    image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
+    container_name: taller-historyserver
+    hostname: historyserver
+    restart: unless-stopped
+    ports:
+      - "8188:8188"
+      - "19888:19888"
+    volumes:
+      - historyserver_data:/hadoop/yarn/timeline
+    environment:
+      SERVICE_PRECONDITION: "namenode:9000 resourcemanager:8088"
+    env_file: ./hadoop.env
+
+volumes:
+  namenode_data:
+  datanode1_data:
+  datanode2_data:
+  historyserver_data:
